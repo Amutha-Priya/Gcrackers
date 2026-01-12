@@ -1,0 +1,22 @@
+.authendication {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  font-size: 16px;
+}
+
+.welcome {
+  font-weight: bold;
+  color: #facc15;
+}
+
+.admin-link {
+  text-decoration: none;
+  color: #00e0ff;
+  font-weight: 600;
+}
+
+.admin-link:hover {
+  color: red;
+  text-decoration: underline;
+}

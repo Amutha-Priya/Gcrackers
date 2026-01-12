@@ -1,0 +1,56 @@
+.headerBanner {
+  width: 100%;
+  font-family: "Poppins", sans-serif;
+  color: rgb(17, 17, 17);
+}
+
+/* Top strip */
+.saleStrip {
+  background-color: #0b3b6f;
+  text-align: center;
+  padding: 8px 0;
+  font-size: 15px;
+  color: whitesmoke;
+}
+
+/* Main banner */
+.mainBanner {
+  padding: 20px 0;
+}
+
+.bannerContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  max-width: 1300px;
+  margin: auto;
+}
+
+/* Logo section */
+.logoSection {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Logo image */
+.logo {
+  border-radius: 100px;
+  object-fit: cover;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Company name */
+.companyName h1 {
+  font-size: 38px;
+  font-weight: 800;
+  margin: 0;
+  letter-spacing: 1px;
+}
+
+.companyName h2 {
+  font-size: 24px;
+  color: #d91a1a;
+  margin-top: 5px;
+}
