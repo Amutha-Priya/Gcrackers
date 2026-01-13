@@ -1,0 +1,241 @@
+"use client";
+
+import React, { useState, useEffect } from "react";
+import generateOrderSummaryPDF from "./OrderSummarypdf"
+
+
+// import jsPDF from "jspdf";
+// import autoTable from "jspdf-autotable";
+
+import QRCode from "qrcode";
+
+function OrderSummary() {
+  const [products, setProducts] = useState<any[]>([]);
+  const [cart, setCart] = useState<{ [key: number]: { qty: number; total: number } }>({});
+
+
+  const [customer, setCustomer] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    address: "",
+  });
+
+  // useEffect(() => {
+  //   fetch("https://crackersbackend-upmi.onrender.com/app/products/")
+  //     .then((res) => {
+  //       if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+  //       return res.json();
+  //     })
+  //     .then((data) => setProducts(data))
+  //     .catch((err) => console.error("Error fetching products:", err));
+  // }, []);
+useEffect(() => {
+  fetch("http://localhost:5000/product")
+    .then(res => res.json())
+    .then(result => {
+      setProducts(result.data); // 🔥 MUST
+    })
+    .catch(err => console.error(err));
+}, []);
+
+  const updateQty = (id: number, change: number, price: number) => {
+    setCart((prev) => {
+      const qty = (prev[id]?.qty || 0) + change;
+      if (qty < 0) return prev;
+      return {
+        ...prev,
+        [id]: { qty, total: qty * price },
+      };
+    });
+  };
+
+  const orderedItems = products.filter((p) => cart[p.id]?.qty > 0);
+  const netTotal = Object.values(cart).reduce((sum, item) => sum + item.total, 0);
+
+  const groupedProducts = products.reduce((acc: any, product: any) => {
+    const category = product.Product_category || "Uncategorized";
+    if (!acc[category]) acc[category] = [];
+    acc[category].push(product);
+    return acc;
+  }, {});
+//  const isValidMobile = /^[6-9]\d{9}$/.test(mobile);
+
+// if (!isValidMobile) {
+//   alert("Enter valid 10-digit mobile number");
+//   return;
+// }
+
+
+const handleDownloadPDF = () => {
+  generateOrderSummaryPDF({
+    customer,
+    orderedItems,
+    cart,
+    netTotal, 
+    // orderId: data.id, // after API success
+  });
+}
+
+
+  const handlePlaceOrder = async () => {
+    if (!orderedItems.length) {
+      alert("Please add at least one product!");
+      return;
+    }
+
+    const payload = {
+      customer_name: customer.name,
+      email: customer.email,
+      mobile: customer.mobile,
+      address: customer.address,
+      products: orderedItems.map((item) => item.id),
+    };
+
+    try {
+      const res = await fetch(
+        // "https://crackersbackend-upmi.onrender.com/app/create-order/",
+        "http://localhost:5000/order", 
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        }
+      );
+
+      if (!res.ok) throw new Error(`HTTP error! ${res.status}`);
+      const data = await res.json();
+      alert(`Order placed successfully! Order ID: ${data.id}`);
+      handleDownloadPDF();
+    } catch (err) {
+      console.error("Error placing order:", err);
+      alert("Failed to place order. Please try again.");
+    }
+  };
+
+  return (
+    <div className="max-w-6xl mx-auto p-6">
+      <h2 className="text-3xl font-bold text-center text-blue-900 mb-6">Order Summary</h2>
+
+      {/* Products Table */}
+      {Object.keys(groupedProducts).map((category) => (
+        <div key={category} className="mb-8">
+          <h3 className="text-xl font-semibold text-gray-800 mb-3">{category}</h3>
+          <div className="overflow-x-auto">
+            <table className="min-w-full bg-white border border-gray-200 rounded-lg">
+              <thead className="bg-gray-100">
+                <tr>
+                  <th className="p-2 border">Image</th>
+                  <th className="p-2 border">Product</th>
+                  <th className="p-2 border">Product (Tamil)</th>
+                  <th className="p-2 border">Qty</th>
+                  <th className="p-2 border">Price</th>
+                  <th className="p-2 border">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                {groupedProducts[category].map((product: any) => (
+                  <tr key={product.id} className="text-center border-b">
+                    <td className="p-2">
+                      {product.Product_image && (
+                        <img
+                          src={product.Product_image}
+                          alt={product.Product_name}
+                          className="w-12 h-12 object-cover rounded"
+                        />
+                      )}
+                    </td>
+                    <td className="p-2">{product.Product_name}</td>
+                    <td className="p-2">{product.Product_name_tamil}</td>
+                    <td className="p-2 flex justify-center items-center gap-2">
+                      <button
+                        className="bg-green-600 text-white px-2 py-1 rounded hover:bg-green-700"
+                        onClick={() => updateQty(product.id, -1, product.Product_price)}
+                      >
+                        -
+                      </button>
+                      <input
+                        type="text"
+                        readOnly
+                        value={cart[product.id]?.qty || 0}
+                        className="w-10 text-center border rounded"
+                      />
+                      <button
+                        className="bg-green-600 text-white px-2 py-1 rounded hover:bg-green-700"
+                        onClick={() => updateQty(product.id, 1, product.Product_price)}
+                      >
+                        +
+                      </button>
+                    </td>
+                    <td className="p-2">₹{product.Product_price}</td>
+                    <td className="p-2">₹{cart[product.id]?.total || 0}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      ))}
+
+      <div className="text-right font-bold text-lg text-gray-800 mb-6">
+        Grand Total: ₹{netTotal}
+      </div>
+
+      {/* Customer Form */}
+      <div className="bg-white p-6 rounded-xl shadow-md max-w-md mx-auto mb-6">
+        <h3 className="text-2xl font-semibold text-blue-900 mb-4 text-center">
+          Customer Details
+        </h3>
+        <input
+          type="text"
+          placeholder="Name"
+          value={customer.name}
+          onChange={(e) => setCustomer({ ...customer, name: e.target.value })}
+          className="w-full p-3 mb-3 border border-gray-300 rounded"
+        />
+        <input
+          type="email"
+          placeholder="Email"
+          value={customer.email}
+          onChange={(e) => setCustomer({ ...customer, email: e.target.value })}
+          className="w-full p-3 mb-3 border border-gray-300 rounded"
+        />
+        <input
+  type="tel"
+  placeholder="Mobile Number"
+  value={customer.phone}
+  onChange={(e) => setCustomer({ ...customer, phone: e.target.value })}
+  maxLength={10}
+  className="w-full p-3 mb-3 border border-gray-300 rounded"
+/>
+
+        <textarea
+          placeholder="Address"
+          value={customer.address}
+          onChange={(e) => setCustomer({ ...customer, address: e.target.value })}
+          className="w-full p-3 mb-3 border border-gray-300 rounded resize-none min-h-[80px]"
+        />
+  
+
+      </div>
+
+      {/* Buttons */}
+      <div className="flex flex-wrap justify-center gap-4 mb-6">
+        <button
+          className="bg-blue-900 text-white px-6 py-3 rounded-lg hover:bg-blue-800"
+          onClick={handlePlaceOrder}
+        >
+          Place Order
+        </button>
+        <button
+          className="border border-blue-900 text-blue-900 px-6 py-3 rounded-lg hover:bg-blue-900 hover:text-white"
+          onClick={handleDownloadPDF}
+        >
+          Download PDF
+        </button>
+      </div>
+    </div>
+  );
+}
+
+export default OrderSummary;

@@ -1,5 +1,4 @@
 import React from "react";
-import "./Navbar.css";
 
 const Navbar = () => {
   const userName = "Amutha"; // 🔹 temporary (UI only)
@@ -8,41 +7,35 @@ const Navbar = () => {
   return (
     <header className="header">
       
-      {/* LEFT SIDE */}
-      <div className="authendication">
-        <span className="welcome">
-          Welcome, {userName} 👋
-        </span>
+      <div className="flex items-center justify-between bg-gray-900 text-white p-4 sticky top-0 z-50">
+  <div className="flex items-center gap-4">
+    <span className="font-bold text-yellow-400">Welcome, Amutha 👋</span>
+    <a href="/admin" className="text-cyan-400 font-semibold hover:text-red-500 underline">
+      Admin
+    </a>
+  </div>
+  <nav>
+    <ul className="flex gap-6">
+      <li><a href="/">Home</a></li>
+      <li><a href="/products">Products</a></li>
+      <li><a href="/offers">Offers</a></li>
+      <li><a href="/about">About Us</a></li>
+      <li><a href="/contact">Contact</a></li>
+    </ul>
+  </nav>
+  <div className="flex items-center gap-4">
+    <input
+      type="text"
+      placeholder="Search crackers..."
+      className="bg-gray-800 text-white rounded-full px-3 py-1 outline-none"
+    />
+    <div className="relative">
+      🛒
+      <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1 rounded-full">2</span>
+    </div>
+  </div>
+</div>
 
-        {isAdmin && (
-          <a href="/admin" className="admin-link">
-            Admin
-          </a>
-        )}
-      </div>
-
-      {/* Navigation */}
-      <nav className="nav">
-        <ul>
-          <li><a href="/">Home</a></li>
-          <li><a href="/products">Products</a></li>
-          <li><a href="/offers">Offers</a></li>
-          <li><a href="/about">About Us</a></li>
-          <li><a href="/contact">Contact</a></li>
-        </ul>
-      </nav>
-
-      {/* Right side */}
-      <div className="right-section">
-        <div className="search-box">
-          <input type="text" placeholder="Search crackers..." />
-        </div>
-
-        <div className="cart-icon">
-          🛒
-          <span className="cart-count">2</span>
-        </div>
-      </div>
     </header>
   );
 };
