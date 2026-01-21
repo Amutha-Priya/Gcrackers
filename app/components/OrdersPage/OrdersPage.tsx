@@ -1,74 +1,97 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import generateOrdersPDF from "./OrdersDocument";
 import axios from "axios";
 
 const API_URL = "http://127.0.0.1:7000/order"; // your Postman endpoint
 
 export default function OrdersPage() {
   const [orders, setOrders] = useState([]);
+  const [openOrderId, setOpenOrderId] = useState(null);
+
 
   useEffect(() => {
     fetchOrders();
   }, []);
 
- const fetchOrders = async () => {
+//  const fetchOrders = async () => {
+//   try {
+//     const res = await axios.get(API_URL);
+//     const data = Array.isArray(res.data) ? res.data : res.data.data;
+//     console.log("DATA ARRAY 👉", data);
+
+//     const grouped = data.reduce((acc, item) => {
+//       const orderId = item.orderId || item.id;
+//       if (!acc[orderId]) {
+//         acc[orderId] = {
+//           id: orderId,
+//           customer_name: item.customer_name,
+//           email: item.email,
+//           mobile: item.mobile,
+//           address: item.address,
+//           createdAt: item.createdAt,
+//           items: [],
+//         };
+//       }
+
+//       if (item.Product) {
+//         acc[orderId].items.push({
+//           product_name: item.Product.Product_name,
+//           product_price: item.Product.Product_price,
+//           quantity: 1,
+//         });
+//       } else {
+//         acc[orderId].items.push({
+//           product_name: `Product ID: ${item.productId}`,
+//           product_price: item.price,
+//           quantity: 1,
+//         });
+//       }
+
+//       return acc;
+//     }, {});
+
+//     setOrders(Object.values(grouped));
+//   } catch (err) {
+//     console.error(err);
+//   }
+// };
+const fetchOrders = async () => {
   try {
     const res = await axios.get(API_URL);
-    const data = Array.isArray(res.data) ? res.data : res.data.data;
-    console.log("DATA ARRAY 👉", data);
+    const data = res.data.data || [];
 
-    const grouped = data.reduce((acc, item) => {
-      const orderId = item.orderId || item.id;
-      if (!acc[orderId]) {
-        acc[orderId] = {
-          id: orderId,
-          customer_name: item.customer_name,
-          email: item.email,
-          mobile: item.mobile,
-          address: item.address,
-          createdAt: item.createdAt,
-          items: [],
-        };
-      }
-
-      if (item.Product) {
-        acc[orderId].items.push({
-          product_name: item.Product.Product_name,
-          product_price: item.Product.Product_price,
-          quantity: 1,
-        });
-      } else {
-        acc[orderId].items.push({
-          product_name: `Product ID: ${item.productId}`,
-          product_price: item.price,
-          quantity: 1,
-        });
-      }
-
-      return acc;
-    }, {});
-
-    setOrders(Object.values(grouped));
+    console.log("ORDERS 👉", data);
+    setOrders(data);
   } catch (err) {
     console.error(err);
   }
 };
 
 
+
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">📦 Orders</h1>
+    <button
+  onClick={() => generateOrdersPDF(orders)}
+  className="fixed top-6 right-6 px-4 py-2 bg-blue-600 text-white rounded shadow-lg"
+>
+  PDF Generate
+</button>
 
       {orders.length === 0 ? (
         <p>No orders yet</p>
       ) : (
         <div className="flex flex-col gap-4">
           {orders.map((order) => {
-            const total = order.items.reduce(
-              (sum, i) => sum + i.product_price * i.quantity,
-              0
-            );
+           const total = order.items.reduce(
+  (sum, item) =>
+    sum + (item.Product?.Product_price || item.price || 0),
+  0
+);
+
 
             return (
               <div
@@ -96,17 +119,34 @@ export default function OrdersPage() {
                 <p>
                   <b>Address:</b> {order.address || "-"}
                 </p>
-                <div className="mt-2">
-                  <b>Items:</b>
-                  <ul className="ml-4 list-disc">
-                    {order.items.map((item, idx) => (
-                      <li key={idx}>
-                        {item.product_name} x {item.quantity} = ₹
-                        {item.product_price * item.quantity}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                <button
+  onClick={() =>
+    setOpenOrderId(openOrderId === order.id ? null : order.id)
+  }
+  className="text-blue-600 underline mt-2"
+>
+  {openOrderId === order.id ? "Hide Items" : "View Items"}
+</button>
+               {openOrderId === order.id && (
+  <div className="mt-2">
+    <b>Items:</b>
+    <ul className="ml-4 list-disc">
+      {order.items.map((item, idx) => {
+        const price = item.Product?.Product_price || item.price || 0;
+        const name =
+          item.Product?.Product_name ||
+          `Product ID: ${item.productId}`;
+
+        return (
+          <li key={idx}>
+            {name} x 1 = ₹{price}
+          </li>
+        );
+      })}
+    </ul>
+  </div>
+)}
+
                 <p className="mt-2 font-bold">Total: ₹{total}</p>
               </div>
             );

@@ -17,7 +17,7 @@ function OrderSummary() {
   const [customer, setCustomer] = useState({
     name: "",
     email: "",
-    phone: "",
+    mobile: "",
     address: "",
   });
 
@@ -203,8 +203,8 @@ const handleDownloadPDF = () => {
         <input
   type="tel"
   placeholder="Mobile Number"
-  value={customer.phone}
-  onChange={(e) => setCustomer({ ...customer, phone: e.target.value })}
+ value={customer.mobile}
+  onChange={(e) => setCustomer({ ...customer, mobile: e.target.value })}
   maxLength={10}
   className="w-full p-3 mb-3 border border-gray-300 rounded"
 />
