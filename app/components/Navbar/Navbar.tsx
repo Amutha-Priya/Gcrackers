@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 
 const Navbar = () => {
   const userName = "Amutha"; // 🔹 temporary (UI only)

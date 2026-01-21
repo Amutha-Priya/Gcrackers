@@ -14,11 +14,6 @@ export default function Home() {
       <Ordersummary />
       <Footer />
     
-      <main className="flex flex-col items-center py-10">
-        <h1>Fresh Cracker Shop 🧨</h1>
-        <p>Welcome Amuthapriya 👋</p>
-        <p>Next.js project started successfully.</p>
-      </main>
     </div>
   );
 }

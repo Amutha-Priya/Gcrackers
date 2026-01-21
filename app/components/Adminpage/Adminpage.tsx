@@ -51,7 +51,8 @@ function AdminPage() {
       formData.append("Product_name_tamil", form.name_tamil);
       formData.append("Product_category", form.category);
       formData.append("Product_price", form.price);
-if (form.image && form.image instanceof File) {
+// ✅ ONLY append if new image selected
+if (form.image instanceof File) {
   formData.append("Product_image", form.image);
 }
 
@@ -67,7 +68,7 @@ if (form.image && form.image instanceof File) {
       ));
     } else {
       // ✅ ADD product
-        res = await axios.post(API_URL, formData, {
+      const  res = await axios.post(API_URL, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       setMessage("✅ Product added successfully!");
@@ -98,9 +99,11 @@ if (form.image && form.image instanceof File) {
       name_tamil: product.Product_name_tamil || "",
       price: product.Product_price,
       category: product.Product_category || "",
- image: product.Product_image || null, // keep existing image path
+ image: null, // keep existing image path
     });
     setEditMode(true);
+  
+
   };
 
   const handleDelete = async (id) => {
@@ -159,11 +162,18 @@ if (form.image && form.image instanceof File) {
       <h2 className="list-title">Product List</h2>
 
       <div className="product-list">
-        {products.map((p) => (
+        {products.map((p) => {
+            console.log("IMAGE PATH FROM DB 👉", p.Product_image);
+            return(
           <div className="product-card" key={p.id}>
             {p.Product_image && (
               <img
-               src={`${p.Product_image}?t=${new Date().getTime()}`} // force refresh
+              //  src={`${p.Product_image}?t=${new Date().getTime()}`} // force refresh
+                 src={
+    p.Product_image.startsWith("http")
+      ? p.Product_image
+      : `http://localhost:7000/images/${p.Product_image.replace("/images/", "")}`
+  }
                 alt={p.Product_name}
               />
             )}
@@ -179,8 +189,8 @@ if (form.image && form.image instanceof File) {
                 Delete
               </button>
             </div>
-          </div>
-        ))}
+          </div>)
+})}
       </div>
     </div>
   );

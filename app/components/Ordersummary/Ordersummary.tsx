@@ -31,7 +31,7 @@ function OrderSummary() {
   //     .catch((err) => console.error("Error fetching products:", err));
   // }, []);
 useEffect(() => {
-  fetch("http://localhost:5000/product")
+  fetch("http://localhost:7000/product")
     .then(res => res.json())
     .then(result => {
       setProducts(result.data); // 🔥 MUST
@@ -95,7 +95,7 @@ const handleDownloadPDF = () => {
     try {
       const res = await fetch(
         // "https://crackersbackend-upmi.onrender.com/app/create-order/",
-        "http://localhost:5000/order", 
+        "http://localhost:7000/order", 
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
