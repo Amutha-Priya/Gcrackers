@@ -6,10 +6,11 @@ import { useEffect } from "react";
 export default function AdminDashboard() {
   const router = useRouter();
   useEffect(() => {
-  const token = localStorage.getItem("adminToken");
-  if (!token) router.push("/admin/login");
-}, []);
-
+    const token = localStorage.getItem("adminToken");
+    if (!token) {
+      router.replace("/admin/login");
+    }
+  }, []);
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-6xl p-6 bg-orange-100  h-[300px]">

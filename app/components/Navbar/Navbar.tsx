@@ -1,10 +1,23 @@
+"use client";
 import React from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+
 
 const Navbar = () => {
   const userName = "Amutha";
   const isAdmin = true;
+  const router = useRouter();
 
+  const handleAdminClick = () => {
+    const token = localStorage.getItem("adminToken");
+
+    if (!token) {
+      router.push("/admin/login"); // 🔥 force login
+    } else {
+      router.push("/admin/login"); // dashboard
+    }
+  };
   return (
     <header className="sticky top-0 z-50">
       <div className="bg-black text-white">
@@ -31,11 +44,14 @@ const Navbar = () => {
 
           {/* Right */}
        <div className="flex items-center gap-6 text-sm">
-    {isAdmin && (
-      <Link href="/admin" className="text-orange-400 font-semibold">
-        Admin
-      </Link>
-    )}
+       {isAdmin && (
+              <button
+                onClick={handleAdminClick}
+                className="text-orange-400 font-semibold hover:underline"
+              >
+                Admin
+              </button>
+            )}
 
     <div className="relative">
       <span className="text-lg">🛒</span>

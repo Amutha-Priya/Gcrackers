@@ -58,9 +58,13 @@ export default function OrdersPage() {
 //   }
 // };
 const fetchOrders = async () => {
-      // const token = localStorage.getItem("adminToken");
+      const token = localStorage.getItem("adminToken");
   try {
-    const res = await axios.get(API_URL);
+    const res = await axios.get(API_URL,{
+        headers: {
+    Authorization: `Bearer ${token}`,
+  },
+    });
     const data = res.data.data || [];
 
     console.log("ORDERS 👉", data);
