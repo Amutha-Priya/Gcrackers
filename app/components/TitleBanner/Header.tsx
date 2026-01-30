@@ -1,51 +1,50 @@
-import React from 'react'
+import React from "react";
 import styles from "./Header.module.css";
 import Image from "next/image";
 
 const Header = () => {
   return (
-  <header className={styles.headerBanner}>
-      {/* Top blue strip */}
+    <header className={styles.headerBanner}>
+      {/* Top Offer Strip */}
       <div className={styles.saleStrip}>
-        ✨ Diwali sale is open now! Hurry to grab your offers! ✨
+        🎆 80% Diwali Discount Offer is Going On! Hurry Up 🎆
       </div>
 
-      {/* Main banner */}
+      {/* Main Header */}
       <div className={styles.mainBanner}>
         <div className={styles.bannerContent}>
-          {/* Left Logo */}
+          {/* Left Image */}
           <div className={styles.logoSection}>
             <Image
               src="/headerimage/Murugan.jpg"
-              alt="Murugan Logo"
-              width={200}
-              height={180}
-              className={styles.logo}
-              style={{ objectFit: 'cover',borderRadius: '80%' }}
+              alt="Murugan"
+              width={170}
+              height={170}
+              className={styles.roundLogo}
             />
           </div>
 
-          {/* Company name */}
+          {/* Brand Name */}
           <div className={styles.companyName}>
             <h1>G CRACKERS WORLD</h1>
             <h2>ஜி கிராகர்ஸ்</h2>
+            <p>Sivakasi Quality Crackers</p>
           </div>
 
-          {/* Right Logo */}
+          {/* Right Image */}
           <div className={styles.logoSection}>
             <Image
               src="/headerimage/Gcracker.jpg"
-              alt="G Crackers Logo"
+              alt="G Crackers"
               width={150}
               height={150}
-              className={styles.logo}
+              className={styles.roundLogo}
             />
           </div>
         </div>
       </div>
     </header>
   );
-  
-}
+};
 
-export default Header
+export default Header;

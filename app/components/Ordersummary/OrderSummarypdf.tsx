@@ -78,18 +78,37 @@ const generateOrderSummaryPDF = async ({
             )}
 
             {/* ================= CUSTOMER DETAILS ================= */}
+            <View style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              width: "100%",
+            }}>
             <View
               style={{
                 borderTopWidth: 1,
                 borderBottomWidth: 1,
                 borderColor: "#000",
+                borderRightWidth: 1,
+                borderRightColor: "#000",
                 padding: 6,
+                width: "50%",
               }}
             >
               <Text>Name: {customer.name || "-"}</Text>
               <Text>Email: {customer.email || "-"}</Text>
               <Text>Mobile: {customer.mobile || "-"}</Text>
               <Text>Address: {customer.address || "-"}</Text>
+            </View>
+            <View style={{ width: "50%",  borderTopWidth: 1,
+                borderBottomWidth: 1,
+                borderColor: "#000",
+                padding: 6,padding: 6 }}>
+              <Text>Order Date: {new Date().toLocaleDateString()}</Text>
+              <Text>Order ID:  {customer.orderId || "-"}</Text>
+              <Text>Payment Method: {customer.paymentMethod || "-"}</Text>
+              <Text>Delivery Method: {customer.deliveryMethod || "-"}</Text>
+              </View>
             </View>
 
             {/* ================= ITEMS TABLE ================= */}
@@ -209,39 +228,83 @@ const generateOrderSummaryPDF = async ({
             )}
 
             {/* ================= GRAND TOTAL ================= */}
+         {totalPages > 1 && pageIndex < totalPages - 1 && (
+  <View
+    style={{
+      borderTop: "1px solid #000",
+      padding: 6,
+      alignItems: "flex-end",
+      fontWeight: "bold",
+    }}
+  >
+    <Text>
+      Page Total : ₹
+      {getPageTotal(
+        orderedItems.slice(
+          pageIndex * itemsPerPage,
+          (pageIndex + 1) * itemsPerPage
+        )
+      )}
+    </Text>
+  </View>
+)}
             {pageIndex === totalPages - 1 && (
               <View
-                style={{
-                  borderTop: "1px solid #000",
-                  padding: 6,
-                  alignItems: "flex-end",
-                  fontWeight: "bold",
-                }}
-              >
-                <Text>Grand Total : ₹{netTotal}</Text>
-              </View>
-            )}
+                  style={{
+      borderTop: "1px solid #000",
+      padding: 6,
+      alignItems: "flex-end",
+      fontWeight: "bold",
+    }}>  <Text>Grand Total : ₹{netTotal}</Text>
+  </View>
+)}
+
           </View>
 
           {/* ================= FOOTER ================= */}
-          <View
-            fixed
-            style={{
-              borderTop: "1px solid #000",
-              padding: 6,
-              flexDirection: "row",
-              justifyContent: "space-between",
-              fontSize: 8,
-              backgroundColor: "#f5f5f5",
-            }}
-          >
-            <Text
-              render={({ pageNumber, totalPages }) =>
-                `Page ${pageNumber} of ${totalPages}`
-              }
-            />
-            <Text>Printed By: System</Text>
-          </View>
+         <View
+  fixed
+  style={{
+    borderTop: "1px solid #000",
+    padding: 6,
+    fontSize: 8,
+    backgroundColor: "#f5f5f5",
+    display: "flex",
+    flexDirection: "column",
+  }}
+>
+
+
+
+  {/* ===== ROW 2 : MESSAGE ===== */}
+  <View style={{ marginTop: 4, textAlign: "center" }}>
+    <Text>We are committed to delivering high-quality products and reliable services.
+  Customer satisfaction is our top priority in everything we do.
+  We ensure transparent pricing and timely delivery for every order.
+  Our team strives to maintain consistency, accuracy, and care at all times.
+  Thank you for trusting us and choosing our service.</Text>
+  </View>
+
+  {/* ===== ROW 3 : DATE & PRINTED BY ===== */}
+  <View
+    style={{
+      flexDirection: "row",
+      justifyContent: "space-between",
+      marginTop: 4,
+    }}
+  >
+
+  
+    <Text
+      render={({ pageNumber, totalPages }) =>
+        `Page ${pageNumber} of ${totalPages}`
+      }
+    />
+
+    <Text>Printed By: System</Text>
+  </View>
+</View>
+
         </Page>
       ))}
     </Document>

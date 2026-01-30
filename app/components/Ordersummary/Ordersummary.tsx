@@ -18,7 +18,10 @@ function OrderSummary() {
     name: "",
     email: "",
     mobile: "",
-    address: "",
+  address: "",
+  orderId: "",           // will come from backend
+  paymentMethod: "",     // user input
+  deliveryMethod: "", 
   });
 
   // useEffect(() => {
@@ -78,40 +81,53 @@ const handleDownloadPDF = () => {
 }
 
 
-  const handlePlaceOrder = async () => {
-    if (!orderedItems.length) {
-      alert("Please add at least one product!");
-      return;
-    }
+ const handlePlaceOrder = async () => {
+  if (!orderedItems.length) {
+    alert("Please add at least one product!");
+    return;
+  }
 
-    const payload = {
-      customer_name: customer.name,
-      email: customer.email,
-      mobile: customer.mobile,
-      address: customer.address,
-      products: orderedItems.map((item) => item.id),
+  const payload = {
+    customer_name: customer.name,
+    email: customer.email,
+    mobile: customer.mobile,
+    address: customer.address,
+    products: orderedItems.map((item) => item.id),
+  };
+
+  try {
+    const res = await fetch("http://localhost:7000/order", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    if (!res.ok) throw new Error(`HTTP error! ${res.status}`);
+    const data = await res.json();
+
+    // ✅ Update customer with orderId
+    const updatedCustomer = {
+      ...customer,
+      orderId: data.id, // orderId from backend
     };
 
-    try {
-      const res = await fetch(
-        // "https://crackersbackend-upmi.onrender.com/app/create-order/",
-        "http://localhost:7000/order", 
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        }
-      );
+    setCustomer(updatedCustomer); // optional, if you want to keep state updated
 
-      if (!res.ok) throw new Error(`HTTP error! ${res.status}`);
-      const data = await res.json();
-      alert(`Order placed successfully! Order ID: ${data.id}`);
-      handleDownloadPDF();
-    } catch (err) {
-      console.error("Error placing order:", err);
-      alert("Failed to place order. Please try again.");
-    }
-  };
+    alert(`Order placed successfully! Order ID: ${data.id}`);
+
+    // ✅ Pass updated customer to PDF
+    generateOrderSummaryPDF({
+      customer: updatedCustomer, // use updated customer
+      orderedItems,
+      cart,
+      netTotal,
+    });
+  } catch (err) {
+    console.error("Error placing order:", err);
+    alert("Failed to place order. Please try again.");
+  }
+};
+
 
   return (
     <div className="max-w-6xl mx-auto p-6">
@@ -138,11 +154,16 @@ const handleDownloadPDF = () => {
                   <tr key={product.id} className="text-center border-b">
                     <td className="p-2">
                       {product.Product_image && (
-                        <img
-                          src={product.Product_image}
-                          alt={product.Product_name}
-                          className="w-12 h-12 object-cover rounded"
-                        />
+                       <img
+  src={
+    product.Product_image.startsWith("http")
+      ? product.Product_image
+      : `${process.env.NEXT_PUBLIC_API_URL}${product.Product_image}`
+  }
+  alt={product.Product_name}
+  className="w-12 h-12 object-cover rounded"
+/>
+
                       )}
                     </td>
                     <td className="p-2">{product.Product_name}</td>
@@ -207,7 +228,31 @@ const handleDownloadPDF = () => {
   onChange={(e) => setCustomer({ ...customer, mobile: e.target.value })}
   maxLength={10}
   className="w-full p-3 mb-3 border border-gray-300 rounded"
-/>
+/><select
+  value={customer.paymentMethod}
+  onChange={(e) =>
+    setCustomer({ ...customer, paymentMethod: e.target.value })
+  }
+  className="w-full p-3 mb-3 border border-gray-300 rounded"
+>
+  <option value="">Select Payment Method</option>
+  <option value="UPI">UPI</option>
+  <option value="Credit Card">Credit Card</option>
+  <option value="Cash on Delivery">Cash on Delivery</option>
+</select>
+
+<select
+  value={customer.deliveryMethod}
+  onChange={(e) =>
+    setCustomer({ ...customer, deliveryMethod: e.target.value })
+  }
+  className="w-full p-3 mb-3 border border-gray-300 rounded"
+>
+  <option value="">Select Delivery Method</option>
+  <option value="Home Delivery">Home Delivery</option>
+  <option value="Pickup">Pickup</option>
+</select>
+
 
         <textarea
           placeholder="Address"

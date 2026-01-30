@@ -1,6 +1,9 @@
 "use client"; // Required for useState/useEffect
 
 import React, { useEffect, useState } from "react";
+import useCrackerEffect from "../Crackereffect/useCrackerEffect";
+
+
 
 const images = [
   "/Bannerimage/Banner1.jpg",
@@ -9,6 +12,7 @@ const images = [
 ];
 
 const Banner = () => {
+   useCrackerEffect();
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
@@ -19,7 +23,7 @@ const Banner = () => {
   }, []);
 
   return (
-    <div className="relative w-full h-[400px] overflow-hidden">
+    <div className="relative w-full h-[500px] overflow-hidden">
       {/* Slides */}
       {images.map((image, i) => (
         <div

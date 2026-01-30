@@ -1,56 +1,67 @@
 .headerBanner {
   width: 100%;
   font-family: "Poppins", sans-serif;
-  color: rgb(17, 17, 17);
 }
 
-/* Top strip */
+/* Offer strip */
 .saleStrip {
-  background-color: #0b3b6f;
+  background: linear-gradient(90deg, #ff9800, #ff5722);
+  color: #fff;
   text-align: center;
-  padding: 8px 0;
-  font-size: 15px;
-  color: whitesmoke;
+  padding: 8px 10px;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0.5px;
 }
 
 /* Main banner */
 .mainBanner {
-  padding: 20px 0;
+  background: linear-gradient(to right, #fff7e6, #ffe0b2);
+  border-bottom: 3px solid #ff9800;
 }
 
 .bannerContent {
+  max-width: 1200px;
+  margin: auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap;
-  max-width: 1300px;
-  margin: auto;
+  padding: 15px 20px;
 }
 
-/* Logo section */
+/* Logos */
 .logoSection {
   display: flex;
   align-items: center;
-  gap: 12px;
+  justify-content: center;
 }
 
-/* Logo image */
-.logo {
-  border-radius: 100px;
-  object-fit: cover;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+.roundLogo {
+  border-radius: 50%;
+  border: 3px solid #ff9800;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
 /* Company name */
+.companyName {
+  text-align: center;
+}
+
 .companyName h1 {
-  font-size: 38px;
-  font-weight: 800;
+  font-size: 32px;
+  color: #d84315;
   margin: 0;
-  letter-spacing: 1px;
+  font-weight: 700;
 }
 
 .companyName h2 {
-  font-size: 24px;
-  color: #d91a1a;
-  margin-top: 5px;
+  font-size: 22px;
+  margin: 5px 0;
+  color: #4e342e;
+}
+
+.companyName p {
+  font-size: 14px;
+  color: #6d4c41;
+  font-weight: 500;
 }
