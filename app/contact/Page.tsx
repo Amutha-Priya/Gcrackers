@@ -2,6 +2,17 @@
 
 import{useState}  from "react";
 export default function ContactPage() {
+  const [form, setForm] = useState({
+  firstName: "",
+  lastName: "",
+  email: "",
+  phone: "",
+  altPhone: "",
+  message: "",
+});
+
+
+  
   return (
     <div className="min-h-screen bg-gray-100 py-10">
       <div className="max-w-6xl mx-auto px-4">
