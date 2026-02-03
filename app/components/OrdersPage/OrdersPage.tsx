@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import generateOrdersPDF from "./OrdersDocument";
 import axios from "axios";
+import generateAdminOrderPDF from "../../components/Adminpage/AdminSingleOrderPDF";
+
 
 const API_URL = "http://127.0.0.1:7000/order"; // your Postman endpoint
 
@@ -81,9 +83,9 @@ const fetchOrders = async () => {
       <h1 className="text-2xl font-bold mb-4">📦 Orders</h1>
     <button
   onClick={() => generateOrdersPDF(orders)}
-  className="fixed top-6 right-6 px-4 py-2 bg-blue-600 text-white rounded shadow-lg"
+  className="fixed top-60 right-6 px-4 py-2 bg-blue-600 text-white rounded shadow-lg"
 >
-  PDF Generate
+  Download Orders PDF
 </button>
 
       {orders.length === 0 ? (
@@ -99,62 +101,89 @@ const fetchOrders = async () => {
 
 
             return (
-              <div
-                key={order.id}
-                className="border rounded p-4 bg-white shadow"
+  <div
+    key={order.id}
+    className="bg-white rounded-xl shadow-md border hover:shadow-lg transition p-6"
+  >
+    {/* Header */}
+    <div className="flex justify-between items-center mb-4">
+      <span className="px-3 py-1 text-sm rounded-full bg-orange-100 text-orange-700 font-semibold">
+        Order #{order.id}
+      </span>
+
+      <span className="text-sm text-gray-500">
+        {new Date(order.createdAt).toLocaleString()}
+      </span>
+    </div>
+
+    {/* Customer Info */}
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-gray-700">
+      <p>
+        <b>Customer:</b> {order.customer_name}
+      </p>
+      <p>
+        <b>Email:</b> {order.email}
+      </p>
+      <p>
+        <b>Mobile:</b> {order.mobile || "-"}
+      </p>
+      <p>
+        <b>Address:</b> {order.address || "-"}
+      </p>
+    </div>
+    {/* Toggle Items */}
+    <button
+      onClick={() =>
+        setOpenOrderId(openOrderId === order.id ? null : order.id)
+      }
+      className="mt-4 text-sm font-semibold text-blue-600 hover:text-blue-800"
+    >
+      {openOrderId === order.id ? "▲ Hide Items" : "▼ View Items"}
+    </button>
+    <br/>
+      {/* Download Items */}
+    <button
+      onClick={() => generateAdminOrderPDF(order)}
+      className="mt-4 text-sm font-semibold text-blue-600 hover:text-blue-800"
+    >
+      ▼ Download Items PDF
+    </button>
+
+    {/* Items */}
+    {openOrderId === order.id && (
+      <div className="mt-4 bg-gray-50 border rounded-lg p-4">
+        <b className="text-gray-800">Items</b>
+
+        <ul className="mt-2 space-y-1 text-sm">
+          {order.items.map((item, idx) => {
+            const price = item.Product?.Product_price || item.price || 0;
+            const name =
+              item.Product?.Product_name ||
+              `Product ID: ${item.productId}`;
+
+            return (
+              <li
+                key={idx}
+                className="flex justify-between border-b pb-1"
               >
-                <div className="flex justify-between mb-2">
-                  <span>
-                    <b>Order ID:</b> #{order.id}
-                  </span>
-                  <span>
-                    <b>Date:</b>{" "}
-                    {new Date(order.createdAt).toLocaleString()}
-                  </span>
-                </div>
-                <p>
-                  <b>Customer:</b> {order.customer_name}
-                </p>
-                <p>
-                  <b>Email:</b> {order.email}
-                </p>
-                <p>
-                  <b>Mobile:</b> {order.mobile || "-"}
-                </p>
-                <p>
-                  <b>Address:</b> {order.address || "-"}
-                </p>
-                <button
-  onClick={() =>
-    setOpenOrderId(openOrderId === order.id ? null : order.id)
-  }
-  className="text-blue-600 underline mt-2"
->
-  {openOrderId === order.id ? "Hide Items" : "View Items"}
-</button>
-               {openOrderId === order.id && (
-  <div className="mt-2">
-    <b>Items:</b>
-    <ul className="ml-4 list-disc">
-      {order.items.map((item, idx) => {
-        const price = item.Product?.Product_price || item.price || 0;
-        const name =
-          item.Product?.Product_name ||
-          `Product ID: ${item.productId}`;
-
-        return (
-          <li key={idx}>
-            {name} x 1 = ₹{price}
-          </li>
-        );
-      })}
-    </ul>
-  </div>
-)}
-
-                <p className="mt-2 font-bold">Total: ₹{total}</p>
-              </div>
+                <span>{name}</span>
+                <span className="font-medium">₹{price}</span>
+              </li>
             );
+          })}
+        </ul>
+      </div>
+    )}
+
+    {/* Total */}
+    <div className="mt-4 flex justify-end">
+      <span className="text-lg font-bold text-green-600">
+        Total: ₹{total}
+      </span>
+    </div>
+  </div>
+);
+
           })}
         </div>
       )}

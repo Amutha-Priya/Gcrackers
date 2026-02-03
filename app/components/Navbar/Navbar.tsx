@@ -2,18 +2,28 @@
 import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useCart} from "../Context/carcontext";
+import { useState, useEffect } from "react";
 
 
 const Navbar = () => {
   const userName = "Amutha";
   const isAdmin = true;
   const router = useRouter();
+const { cart } = useCart();
+const [openCart, setOpenCart] = useState(false);
+
+const cartItems = Object.entries(cart);
+const cartCount = cartItems.reduce(
+  (sum: number, [, item]: any) => sum + item.qty,
+  0
+);;
 
   const handleAdminClick = () => {
     const token = localStorage.getItem("adminToken");
 
     if (!token) {
-      router.push("/admin/login"); // 🔥 force login
+      router.push("/admin"); // 🔥 force login
     } else {
       router.push("/admin/login"); // dashboard
     }
@@ -53,16 +63,73 @@ const Navbar = () => {
               </button>
             )}
 
-    <div className="relative">
-      <span className="text-lg">🛒</span>
-      <span className="absolute -top-2 -right-3 bg-orange-500 text-black text-xs px-1 rounded-full">
-        2
-      </span>
-            </div>
+<div
+  className="relative cursor-pointer"
+  onClick={() => setOpenCart(true)}
+>
+  <span className="text-lg">🛒</span>
+
+  {cartCount > 0 && (
+    <span className="absolute -top-2 -right-3 bg-orange-500 text-black text-xs px-1 rounded-full">
+      {cartCount}
+    </span>
+  )}
+</div>
+
           </div>
 
         </div>
       </div>
+      {/* Cart Sidebar */}
+{openCart && (
+  <>
+    {/* Overlay */}
+    <div
+  className="fixed inset-0 z-40 bg-transparent"
+      onClick={() => setOpenCart(false)}
+    />
+
+    {/* Sidebar */}
+    <div className="fixed top-0 right-0 w-80 h-full bg-white z-50 shadow-lg p-4 flex flex-col">
+      <div className="flex justify-between items-center mb-4">
+        <h3 className="text-lg font-semibold">Your Cart</h3>
+        <button
+          onClick={() => setOpenCart(false)}
+          className="text-xl font-bold"
+        >
+          ×
+        </button>
+      </div>
+
+      {cartItems.length === 0 ? (
+        <p className="text-gray-500 text-center mt-10">
+          Your cart is empty 🛒
+        </p>
+      ) : (
+        <div className="flex-1 overflow-y-auto">
+          {cartItems.map(([id, item]: any) => (
+            <div
+              key={id}
+              className="border-b py-3 text-sm"
+            >
+              <p>Product ID: {id}</p>
+              <p>Qty: {item.qty}</p>
+              <p className="font-semibold">₹{item.total}</p>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Checkout */}
+      {cartItems.length > 0 && (
+        <button className="mt-4 bg-green-600 text-white py-2 rounded">
+          Checkout
+        </button>
+      )}
+    </div>
+  </>
+)}
+
     </header>
   );
 };

@@ -1,7 +1,10 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import generateOrderSummaryPDF from "./OrderSummarypdf"
+import generateOrderSummaryPDF from "./OrderSummarypdf";
+
+import { useCart } from "./../Context/carcontext";
+
 
 
 // import jsPDF from "jspdf";
@@ -11,7 +14,9 @@ import QRCode from "qrcode";
 
 function OrderSummary() {
   const [products, setProducts] = useState<any[]>([]);
-  const [cart, setCart] = useState<{ [key: number]: { qty: number; total: number } }>({});
+  // const [cart, setCart] = useState<{ [key: number]: { qty: number; total: number } }>({});
+
+const { cart, updateQty } = useCart();
 
 
   const [customer, setCustomer] = useState({
@@ -42,16 +47,16 @@ useEffect(() => {
     .catch(err => console.error(err));
 }, []);
 
-  const updateQty = (id: number, change: number, price: number) => {
-    setCart((prev) => {
-      const qty = (prev[id]?.qty || 0) + change;
-      if (qty < 0) return prev;
-      return {
-        ...prev,
-        [id]: { qty, total: qty * price },
-      };
-    });
-  };
+  // const updateQty = (id: number, change: number, price: number) => {
+  //   setCart((prev) => {
+  //     const qty = (prev[id]?.qty || 0) + change;
+  //     if (qty < 0) return prev;
+  //     return {
+  //       ...prev,
+  //       [id]: { qty, total: qty * price },
+  //     };
+  //   });
+  // };
 
   const orderedItems = products.filter((p) => cart[p.id]?.qty > 0);
   const netTotal = Object.values(cart).reduce((sum, item) => sum + item.total, 0);
