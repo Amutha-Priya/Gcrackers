@@ -135,16 +135,16 @@ const handleDownloadPDF = () => {
 
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
+    <div className="max-full mx-auto p-6 bg-orange-50 rounded-xl shadow-md width-full">
       <h2 className="text-3xl font-bold text-center text-blue-900 mb-6">Order Summary</h2>
 
       {/* Products Table */}
       {Object.keys(groupedProducts).map((category) => (
-        <div key={category} className="mb-8">
+        <div key={category} className="max-w-6xl mx-auto mb-8 text-center background-black p-4 rounded-lg shadow">
           <h3 className="text-xl font-semibold text-gray-800 mb-3">{category}</h3>
           <div className="overflow-x-auto">
             <table className="min-w-full bg-white border border-gray-200 rounded-lg">
-              <thead className="bg-gray-100">
+              <thead className="bg-orange-400">
                 <tr>
                   <th className="p-2 border">Image</th>
                   <th className="p-2 border">Product</th>
@@ -157,7 +157,7 @@ const handleDownloadPDF = () => {
               <tbody>
                 {groupedProducts[category].map((product: any) => (
                   <tr key={product.id} className="text-center border-b">
-                    <td className="p-2">
+                    <td className="p-2 border-r border-l">
                       {product.Product_image && (
                        <img
   src={
@@ -171,30 +171,35 @@ const handleDownloadPDF = () => {
 
                       )}
                     </td>
-                    <td className="p-2">{product.Product_name}</td>
-                    <td className="p-2">{product.Product_name_tamil}</td>
-                    <td className="p-2 flex justify-center items-center gap-2">
-                      <button
-                        className="bg-green-600 text-white px-2 py-1 rounded hover:bg-green-700"
-                        onClick={() => updateQty(product.id, -1, product.Product_price)}
-                      >
-                        -
-                      </button>
-                      <input
-                        type="text"
-                        readOnly
-                        value={cart[product.id]?.qty || 0}
-                        className="w-10 text-center border rounded"
-                      />
-                      <button
-                        className="bg-green-600 text-white px-2 py-1 rounded hover:bg-green-700"
-                        onClick={() => updateQty(product.id, 1, product.Product_price)}
-                      >
-                        +
-                      </button>
-                    </td>
-                    <td className="p-2">₹{product.Product_price}</td>
-                    <td className="p-2">₹{cart[product.id]?.total || 0}</td>
+                    <td className="p-2 border-r">{product.Product_name}</td>
+                    <td className="p-2 border-r">{product.Product_name_tamil}</td>
+                  <td className="p-2 border-r">
+  <div className="flex justify-center items-center gap-2 h-full">
+    <button
+      className="bg-orange-500 text-white px-2 py-1 rounded hover:bg-green-700"
+      onClick={() => updateQty(/* same args */ -1)}
+    >
+      -
+    </button>
+
+    <input
+      type="text"
+      readOnly
+      value={cart[product.id]?.qty || 0}
+      className="w-10 text-center border rounded"
+    />
+
+    <button
+      className="bg-orange-500 text-white px-2 py-1 rounded hover:bg-green-700"
+      onClick={() => updateQty(/* same args */ 1)}
+    >
+      +
+    </button>
+  </div>
+</td>
+
+                    <td className="p-2 border-r">₹{product.Product_price}</td>
+                    <td className="p-2 border-r">₹{cart[product.id]?.total || 0}</td>
                   </tr>
                 ))}
               </tbody>

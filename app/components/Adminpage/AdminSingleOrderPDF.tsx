@@ -22,10 +22,20 @@ const generateAdminOrderPDF = async (order: any) => {
   const getPageTotal = (items: any[]) =>
     items.reduce((sum, item) => sum + (item.total || item.price * item.qty || 0), 0);
 
-  const netTotal = orderedItems.reduce(
-    (sum, item) => sum + (item.total || item.price * item.qty || 0),
-    0
+const getQty = (item: any) =>
+  Number(
+    item.qty ??
+    item.quantity ??
+    item.OrderItem?.qty ??
+    item.OrderItem?.quantity ??
+    1   // fallback
   );
+
+
+  const netTotal = orderedItems.reduce(
+  (sum, item) => sum + (item.total ?? item.price * getQty(item)),
+  0
+);
 
   const columns = {
     sno: "5%",
@@ -92,13 +102,14 @@ const generateAdminOrderPDF = async (order: any) => {
                     <Text>{item.Product?.Product_name || "-"}</Text>
                   </View>
                   <View style={{ width: columns.qty, padding: 4 }}>
-                    <Text>{item.qty}</Text>
+                  <Text>{getQty(item)}</Text>
+
                   </View>
                   <View style={{ width: columns.price, padding: 4 }}>
                     <Text>₹{item.price}</Text>
                   </View>
                   <View style={{ width: columns.total, padding: 4 }}>
-                    <Text>₹{item.total || item.price * item.qty}</Text>
+<Text>₹{item.total ?? item.price * getQty(item)}</Text>
                   </View>
                 </View>
               ))}

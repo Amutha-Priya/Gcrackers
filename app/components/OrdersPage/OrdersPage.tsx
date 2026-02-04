@@ -93,11 +93,12 @@ const fetchOrders = async () => {
       ) : (
         <div className="flex flex-col gap-4">
           {orders.map((order) => {
-           const total = order.items.reduce(
+     const total = (order.items || []).reduce(
   (sum, item) =>
     sum + (item.Product?.Product_price || item.price || 0),
   0
 );
+
 
 
             return (
@@ -155,7 +156,7 @@ const fetchOrders = async () => {
         <b className="text-gray-800">Items</b>
 
         <ul className="mt-2 space-y-1 text-sm">
-          {order.items.map((item, idx) => {
+          {(order.items || []).map((item, idx) => {
             const price = item.Product?.Product_price || item.price || 0;
             const name =
               item.Product?.Product_name ||

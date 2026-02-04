@@ -13,7 +13,8 @@ export default function AdminDashboard() {
   }, []);
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-6xl p-6 bg-orange-100  h-[300px]">
+     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-6xl p-6 bg-orange-100 h-[300px]">
+
         
         <div
           onClick={() => router.push("/admin/products")}
@@ -30,6 +31,13 @@ export default function AdminDashboard() {
           <h2 className="text-2xl font-bold mb-2">🧾 Order Admin</h2>
           <p>View orders, customers, totals</p>
         </div>
+        <div
+  onClick={() => router.push("/admin/pageimages")}
+  className="cursor-pointer bg-white shadow-lg rounded-xl p-16 min-h-[160px] text-center hover:scale-105 transition"
+>
+  <h2 className="text-2xl font-bold mb-2">🖼️ Page Images</h2>
+  <p>Manage banners, title & about images</p>
+</div>
 
       </div>
     </div>

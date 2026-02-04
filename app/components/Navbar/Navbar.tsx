@@ -17,7 +17,12 @@ const cartItems = Object.entries(cart);
 const cartCount = cartItems.reduce(
   (sum: number, [, item]: any) => sum + item.qty,
   0
-);;
+);
+
+const grandTotal = cartItems.reduce(
+  (sum: number, [, item]: any) => sum + item.total,
+  0
+);
 
   const handleAdminClick = () => {
     const token = localStorage.getItem("adminToken");
@@ -34,7 +39,7 @@ const cartCount = cartItems.reduce(
 
         {/* Top thin strip */}
         <div className="bg-orange-500 text-black text-sm px-6 py-1 flex justify-between">
-          <span>Welcome, {userName}</span>
+          <span>😊 Welcome to G Crackers World!</span>
           <span>📞 Order Now | Best Sivakasi Prices</span>
         </div>
 
@@ -101,30 +106,48 @@ const cartCount = cartItems.reduce(
         </button>
       </div>
 
-      {cartItems.length === 0 ? (
-        <p className="text-gray-500 text-center mt-10">
-          Your cart is empty 🛒
-        </p>
-      ) : (
-        <div className="flex-1 overflow-y-auto">
-          {cartItems.map(([id, item]: any) => (
-            <div
-              key={id}
-              className="border-b py-3 text-sm"
-            >
-              <p>Product ID: {id}</p>
-              <p>Qty: {item.qty}</p>
-              <p className="font-semibold">₹{item.total}</p>
-            </div>
-          ))}
+{cartItems.length > 0 && (
+  <div className="flex-1 overflow-y-auto">
+    {cartItems.map(([id, item]: [string, any]) => (
+      <div
+        key={id}
+        className="border-b py-3 flex items-center gap-4"
+      >
+        {/* Image */}
+        <div className="w-16 flex-shrink-0">
+          <img
+            src={item.image}
+            alt={item.name}
+            className="w-16 h-16 object-cover rounded"
+          />
         </div>
-      )}
+
+        {/* Name */}
+        <div className="flex-1">
+          <p className="font-semibold">{item.name}</p>
+           <p className="font-semibold">Qty: {item.qty}</p>
+        </div>
+
+        {/* Amount */}
+        <div className="w-20 text-right font-semibold">
+           <p className="font-semibold">Amount</p>
+          
+          ₹{item.total}
+        </div>
+      </div>
+    ))}
+  </div>
+)}
+
+
 
       {/* Checkout */}
       {cartItems.length > 0 && (
-        <button className="mt-4 bg-green-600 text-white py-2 rounded">
-          Checkout
-        </button>
+        <div className="text-sm text-center font-semibold border-t border-black-300">
+  Total: ₹{grandTotal}
+ 
+</div>
+        
       )}
     </div>
   </>
