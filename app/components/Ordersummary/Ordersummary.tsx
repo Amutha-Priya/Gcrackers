@@ -177,8 +177,10 @@ const handleDownloadPDF = () => {
   <div className="flex justify-center items-center gap-2 h-full">
     <button
       className="bg-orange-500 text-white px-2 py-1 rounded hover:bg-green-700"
-      onClick={() => updateQty(/* same args */ -1)}
-    >
+      onClick={() => updateQty(product.id,product.Product_name, product.Product_image.startsWith("http")
+        ? product.Product_image
+        : `${process.env.NEXT_PUBLIC_API_URL}${product.Product_image}`,  -1, product.Product_price)}
+ >
       -
     </button>
 
@@ -191,8 +193,10 @@ const handleDownloadPDF = () => {
 
     <button
       className="bg-orange-500 text-white px-2 py-1 rounded hover:bg-green-700"
-      onClick={() => updateQty(/* same args */ 1)}
-    >
+        onClick={() => updateQty(product.id,product.Product_name, product.Product_image.startsWith("http")
+        ? product.Product_image
+        : `${process.env.NEXT_PUBLIC_API_URL}${product.Product_image}`,1, product.Product_price)}
+>
       +
     </button>
   </div>
@@ -208,9 +212,11 @@ const handleDownloadPDF = () => {
         </div>
       ))}
 
-      <div className="text-right font-bold text-lg text-gray-800 mb-6">
-        Grand Total: ₹{netTotal}
-      </div>
+    <div className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen
+  text-center font-bold text-lg text-gray-800 mb-6 bg-orange-400 p-3 shadow">
+  Grand Total: ₹{netTotal}
+</div>
+
 
       {/* Customer Form */}
       <div className="bg-white p-6 rounded-xl shadow-md max-w-md mx-auto mb-6">

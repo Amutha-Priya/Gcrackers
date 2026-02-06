@@ -147,8 +147,9 @@ export default function Footer() {
           </h3>
 
  <div className="space-y-2 text-l">
-    <p className="text-l">📞 (+91) 99999 88888</p>
-  <p className="text-l">📞 (+91) 99523 49604</p>
+    <p className="text-l">📞 (+91) 79041 59944</p>
+  <p className="text-l">📞 (+91) 87543 95115</p>
+    <p className="text-l">📞 (+91) 99945 00741</p>
   <p className="flex items-center gap-2">
     <HiOutlineMail className="text-yellow-400 text-lg" />
     Gcrackers@gmail.com

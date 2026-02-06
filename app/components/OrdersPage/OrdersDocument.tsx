@@ -45,10 +45,16 @@ const grandTotal = orders.reduce((sum, order) => {
   const OrdersListDocument = () => (
     <Document>
 <Page size="A4" style={styles.page}>
+  <View   style={{
+    flex: 1,
+    borderWidth: 1,
+    borderColor: "black",
+ 
+  }}>
   <Text style={styles.title}>Orders Summary</Text>
 
         {/* TABLE HEADER */}
-       <View style={[styles.row, styles.header]}>
+       <View style={[styles.row, styles.header, { borderTopWidth: 1 }]}>
     <Text style={styles.cellCustomer}>Customer</Text>
     <Text style={styles.cellEmail}>Email</Text>
     <Text style={styles.cellMobile}>Mobile</Text>
@@ -103,7 +109,7 @@ const grandTotal = orders.reduce((sum, order) => {
     `Page ${pageNumber} of ${totalPages}`
   }
 />
-
+</View>
       </Page>
     </Document>
   );

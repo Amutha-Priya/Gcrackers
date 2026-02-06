@@ -4,6 +4,7 @@ import "./globals.css";
 import HeaderBanner from "./components/TitleBanner/Header";
 import Footer from "./components/footer/footer";
 import { CartProvider } from "./components/Context/carcontext";
+import Navbar from "./components/Navbar/Navbar";
 
 export const metadata: Metadata = {
   title: "G Crackers Shop",
@@ -20,6 +21,7 @@ export default function RootLayout({
       <body>
         <CartProvider>
           <HeaderBanner />
+          <Navbar />
           {children}
           <Footer />
         </CartProvider>
