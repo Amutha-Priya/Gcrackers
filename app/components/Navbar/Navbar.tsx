@@ -12,6 +12,8 @@ const Navbar = () => {
   const router = useRouter();
 const { cart } = useCart();
 const [openCart, setOpenCart] = useState(false);
+const [mobileMenu, setMobileMenu] = useState(false);
+
 
 const cartItems = Object.entries(cart);
 const cartCount = cartItems.reduce(
@@ -38,24 +40,58 @@ const grandTotal = cartItems.reduce(
       <div className="bg-black text-white">
 
         {/* Top thin strip */}
-        <div className="bg-orange-500 text-black text-sm px-6 py-1 flex justify-between">
+<div className="bg-orange-500 text-black text-xs sm:text-sm px-3 sm:px-6 py-1 flex flex-col sm:flex-row justify-between items-center gap-1">
           <span>😊 Welcome to G Crackers World!</span>
           <span>📞 Order Now | Best Sivakasi Prices</span>
         </div>
 
         {/* Main navbar */}
-<div className="flex items-center px-8 py-3 border-b border-gray-800">
+{/* <div className="flex items-center px-8 py-3 border-b border-gray-800"> */}
+<div className="flex items-center justify-between px-4 md:px-8 py-3 border-b border-gray-800">
 
-          {/* Left */}
-          <nav className="flex-1 flex justify-center">
-    <ul className="flex gap-16 text-lg font-medium tracking-wide">
-      <li><Link href="/" className="hover:text-orange-400">Home</Link></li>
-      <li><Link href="/products" className="hover:text-orange-400">Products</Link></li>
-      <li><Link href="/offers" className="hover:text-orange-400">Offers</Link></li>
-      <li><Link href="/about" className="hover:text-orange-400">About Us</Link></li>
-      <li><Link href="/contact" className="hover:text-orange-400">Contact</Link></li>
-    </ul>
-  </nav>
+{/* Hamburger (Mobile Only) */}
+<button
+  className="md:hidden text-2xl"
+  onClick={() => setMobileMenu(!mobileMenu)}
+>
+  ☰
+</button>
+
+{/* Desktop Menu */}
+<nav className="hidden md:flex flex-1 justify-center">
+  <ul className="flex gap-8 text-lg font-medium tracking-wide">
+    <li><Link href="/" className="hover:text-orange-400">Home</Link></li>
+    <li><Link href="/products" className="hover:text-orange-400">Products</Link></li>
+    <li><Link href="/offers" className="hover:text-orange-400">Offers</Link></li>
+    <li><Link href="/about" className="hover:text-orange-400">About</Link></li>
+    <li><Link href="/contact" className="hover:text-orange-400">Contact</Link></li>
+  </ul>
+</nav>
+
+{/* Mobile Dropdown */}
+{mobileMenu && (
+
+<div
+  className={`absolute top-14 left-2 w-40 bg-black text-white rounded-lg p-4 space-y-3 md:hidden ${
+    mobileMenu ? "translate-x-0" : "-translate-x-full"
+  } transition-transform duration-300 z-50 md:hidden`}
+>
+
+  <div className="text-right p-4">
+    <button onClick={() => setMobileMenu(false)}>✕</button>
+  </div>
+
+  {/* Menu Links */}
+  <div className="flex flex-col px-4 space-y-4 text-base">
+    <Link href="/" onClick={() => setMobileMenu(false)} className="hover:text-orange-400">Home</Link>
+    <Link href="/products" onClick={() => setMobileMenu(false)} className="hover:text-orange-400">Products</Link>
+    <Link href="/offers" onClick={() => setMobileMenu(false)} className="hover:text-orange-400">Offers</Link>
+    <Link href="/about" onClick={() => setMobileMenu(false)} className="hover:text-orange-400">About</Link>
+    <Link href="/contact" onClick={() => setMobileMenu(false)} className="hover:text-orange-400">Contact</Link>
+  </div>
+</div>
+
+)}
 
           {/* Right */}
        <div className="flex items-center gap-6 text-sm">
@@ -90,12 +126,14 @@ const grandTotal = cartItems.reduce(
   <>
     {/* Overlay */}
     <div
-  className="fixed inset-0 z-40 bg-transparent"
+  // className="fixed inset-0 z-40 bg-transparent"
+        className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40"
+
       onClick={() => setOpenCart(false)}
     />
 
     {/* Sidebar */}
-    <div className="fixed top-0 right-0 w-80 h-full bg-white z-50 shadow-lg p-4 flex flex-col">
+    <div className="fixed top-0 right-0 w-full sm:w-80 h-full bg-white z-50 shadow-lg p-4 flex flex-col">
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-lg font-semibold">Your Cart</h3>
         <button

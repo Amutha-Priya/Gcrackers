@@ -135,7 +135,7 @@ const handleDownloadPDF = () => {
 
 
   return (
-    <div className="max-full mx-auto p-6 bg-orange-50 rounded-xl shadow-md width-full">
+<div className="max-w-7xl mx-auto p-4 md:p-6 bg-orange-50 rounded-xl shadow-md">
       <h2 className="text-3xl font-bold text-center text-blue-900 mb-6">Order Summary</h2>
 
       {/* Products Table */}
@@ -143,21 +143,21 @@ const handleDownloadPDF = () => {
         <div key={category} className="max-w-6xl mx-auto mb-8 text-center background-black p-4 rounded-lg shadow">
           <h3 className="text-xl font-semibold text-gray-800 mb-3">{category}</h3>
           <div className="overflow-x-auto">
-            <table className="min-w-full bg-white border border-gray-200 rounded-lg">
+<table className="w-full bg-white border border-gray-200 rounded-lg text-xs md:text-sm">
               <thead className="bg-orange-400">
                 <tr>
-                  <th className="p-2 border">Image</th>
-                  <th className="p-2 border">Product</th>
-                  <th className="p-2 border">Product (Tamil)</th>
-                  <th className="p-2 border">Qty</th>
-                  <th className="p-2 border">Price</th>
-                  <th className="p-2 border">Total</th>
+                  <th className="p-1 md:p-2 border">Image</th>
+                  <th className="p-1 md:p-2 border">Product</th>
+                  <th className="p-1 md:p-2 border">Product (Tamil)</th>
+                  <th className="p-1 md:p-2 border">Qty</th>
+                  <th className="p-1 md:p-2 border">Price</th>
+                  <th className="p-1 md:p-2 border">Total</th>
                 </tr>
               </thead>
               <tbody>
                 {groupedProducts[category].map((product: any) => (
                   <tr key={product.id} className="text-center border-b">
-                    <td className="p-2 border-r border-l">
+                    <td className="hidden md:table-cell p-2 border">
                       {product.Product_image && (
                        <img
   src={
@@ -211,9 +211,8 @@ const handleDownloadPDF = () => {
           </div>
         </div>
       ))}
+<div className="max-w-6xl mx-auto text-center font-bold text-lg text-gray-800 mb-6 bg-orange-400 p-3 shadow rounded">
 
-    <div className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-screen
-  text-center font-bold text-lg text-gray-800 mb-6 bg-orange-400 p-3 shadow">
   Grand Total: ₹{netTotal}
 </div>
 

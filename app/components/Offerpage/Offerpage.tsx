@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useCart } from "../../components/Context/carcontext";
+import { useCart } from "./../Context/carcontext";
 
 const offers = {
   combos: [
@@ -31,8 +31,10 @@ const offers = {
   ],
 };
 
+
 export default function Offerpage() {
-  const { addToCart } = useCart();
+  // const { addToCart } = useCart();
+  const { updateQty } = useCart();
 
   return (
     <div className="min-h-screen bg-orange-50 p-6">
@@ -64,12 +66,19 @@ export default function Offerpage() {
               </p>
               <button
                 onClick={() =>
-                  addToCart({
-                    id: box.id,
-                    name: box.name,
-                    price: box.price,
-                    image: "/combo.png",
-                  })
+                  // addToCart({
+                  //   id: box.id,
+                  //   name: box.name,
+                  //   price: box.price,
+                  //   image: "/combo.png",
+                  // })
+                               updateQty(
+  Number(box.id.replace(/\D/g, "")), // convert id to number
+  box.name,
+  "/combo.png",
+  1,
+  box.price
+)
                 }
                 className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600"
               >
@@ -96,19 +105,21 @@ export default function Offerpage() {
               <p className="text-xl font-bold text-green-600 my-3">
                 ₹{pack.price}
               </p>
-              <button
-                onClick={() =>
-                  addToCart({
-                    id: pack.id,
-                    name: pack.name,
-                    price: pack.price,
-                    image: "/budget.png",
-                  })
-                }
-                className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
-              >
-                Add Pack
-              </button>
+             <button
+  onClick={() =>
+    updateQty(
+      pack.id,
+      pack.name,
+      "/budget.png",
+      1,
+      pack.price
+    )
+  }
+  className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+>
+  Add Pack
+</button>
+
             </div>
           ))}
         </div>

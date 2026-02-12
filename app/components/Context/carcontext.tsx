@@ -10,18 +10,25 @@ type CartItem = {
 
 // ✅ CartType is a mapping from product ID to CartItem
 type CartType = {
-  [key: number]: CartItem;
+  [key: string]: CartItem;
 };
 const CartContext = createContext<{
   cart: CartType;
-  updateQty: (id: number, name: string, image: string, change: number, price: number) => void;
+  updateQty: (
+    id: string,
+    name: string,
+    image: string,
+    change: number,
+    price: number
+  ) => void;
 } | null>(null);
+
 
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   // const [cart, setCart] = useState<{ [key: number]: { qty: number; total: number } }>({});
     const [cart, setCart] = useState<CartType>({});
 
-  const updateQty = (id: number,name: string, image: string, change: number, price: number) => {
+  const updateQty = (id: string,name: string, image: string, change: number, price: number) => {
     setCart((prev) => {
       const qty = (prev[id]?.qty || 0) + change;
       if (qty <= 0) {
