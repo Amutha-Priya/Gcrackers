@@ -56,63 +56,63 @@ Message: ${form.message}
     window.open(url, "_blank");
   }}
 >
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <input
-                  type="text"
-                  placeholder="First name*"
-                  className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <input
+      type="text"
+      placeholder="First name*"
+      className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
       onChange={(e) => setForm({ ...form, firstName: e.target.value })}
       required
-                />
-                <input
-                  type="text"
-                  placeholder="Last name*"
-                  className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
+    />
+    <input
+      type="text"
+      placeholder="Last name*"
+      className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
       onChange={(e) => setForm({ ...form, lastName: e.target.value })}
       required
-                />
-              </div>
+    />
+  </div>
 
-              <input
-                type="email"
-                placeholder="Email"
-                className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
+  <input
+    type="email"
+    placeholder="Email"
+    className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
     onChange={(e) => setForm({ ...form, email: e.target.value })}
-              />
+  />
 
-              <input
-                type="tel"
-                placeholder="Phone*"
-                className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
+  <input
+    type="tel"
+    placeholder="Phone*"
+    className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
     onChange={(e) => setForm({ ...form, phone: e.target.value })}
     required
-              />
+  />
 
-              <input
-                type="tel"
+  <input
+    type="tel"
     placeholder="Alternate Phone number"
-                className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
+    className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
     onChange={(e) => setForm({ ...form, altPhone: e.target.value })}
-              />
+  />
 
-              <textarea
-                rows={4}
-                placeholder="Your Message"
-                className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
+  <textarea
+    rows={4}
+    placeholder="Your Message"
+    className="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
     onChange={(e) => setForm({ ...form, message: e.target.value })}
-              ></textarea>
+  ></textarea>
 
-              <button
-                type="submit"
-                className="bg-orange-600 text-white px-6 py-2 rounded hover:bg-orange-700 transition"
-              >
+  <button
+    type="submit"
+    className="bg-orange-600 text-white px-6 py-2 rounded hover:bg-orange-700 transition"
+  >
     Send via WhatsApp
-              </button>
+  </button>
 
   <p className="text-sm text-gray-500">
     * This will open WhatsApp to send your message
   </p>
-            </form>
+</form>
 
           </div>
 
