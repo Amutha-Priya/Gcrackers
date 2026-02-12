@@ -135,8 +135,8 @@ const handleDownloadPDF = () => {
 
 
   return (
-<div className="max-w-7xl mx-auto p-4 md:p-6 bg-orange-50 rounded-xl shadow-md">
-      <h2 className="text-3xl font-bold text-center text-blue-900 mb-6">Order Summary</h2>
+    <div className="max-w-7xl mx-auto p-4 md:p-6 bg-orange-50 rounded-xl shadow-md">
+  <h2 className="text-3xl font-bold text-center text-blue-900 mb-6">Order Summary</h2>
 
       {/* Products Table */}
       {Object.keys(groupedProducts).map((category) => (
@@ -293,6 +293,7 @@ const handleDownloadPDF = () => {
         >
           Download PDF
         </button>
+   
       </div>
     </div>
   );
